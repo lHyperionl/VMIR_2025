@@ -13,6 +13,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,10 @@ class Game2048Activity : AppCompatActivity() {
     private lateinit var btnRestart: Button
     private lateinit var btnUndo: Button
     private lateinit var btnLeaderboard: Button
+
+    // NEW: Overlay views (inside grid container)
+    private lateinit var tvGameOver: TextView
+    private lateinit var overlayBackground: View
 
     private lateinit var tileAnimation: TileAnimation
     private var isAnimating = false
@@ -61,6 +66,11 @@ class Game2048Activity : AppCompatActivity() {
 
         // Initialize leaderboard button
         btnLeaderboard = findViewById(R.id.btnLeaderboard)
+
+        // NEW: Get references to the overlay views
+        overlayBackground = findViewById(R.id.overlayBackground)
+        tvGameOver = findViewById(R.id.tvGameOver)
+
         btnLeaderboard.setOnClickListener {
             // Navigate to LeaderboardActivity
             val intent = Intent(this, LeaderboardActivity::class.java)
@@ -95,6 +105,10 @@ class Game2048Activity : AppCompatActivity() {
         // Restart game
         btnRestart.setOnClickListener {
             startNewGame()
+            // Hide overlay in case it was visible
+            overlayBackground.visibility = View.GONE
+            tvGameOver.visibility = View.GONE
+            tvGameOver.alpha = 0f
         }
 
         //SET UP UNDO BUTTON CLICK LOGIC
@@ -648,6 +662,12 @@ class Game2048Activity : AppCompatActivity() {
             height = totalGridSize
         }
 
+        val gameContainer = findViewById<FrameLayout>(R.id.gameContainer)
+        gameContainer.layoutParams = gameContainer.layoutParams.apply {
+            width = totalGridSize
+            height = totalGridSize
+        }
+
         gridLayout.setPadding(8.dp, 8.dp, 8.dp, 8.dp)
 
         // Set grid background
@@ -864,11 +884,28 @@ class Game2048Activity : AppCompatActivity() {
         previousScores.add(score)
     }
 
-    private fun handleGameOver() {
-        // Update the score in Firestore once
-        FirestoreHelper.updateHighScoreInFirestore(score)
+    private fun showGameOverOverlay() {
+        // Find the overlay views
+        val overlayBackground = findViewById<View>(R.id.overlayBackground)
+        val tvGameOver = findViewById<TextView>(R.id.tvGameOver)
 
-        // No need to call showLeaderboard() here since we have a dedicated button for that
-        // No need to update score twice
+        // Make them visible
+        overlayBackground.visibility = View.VISIBLE
+        tvGameOver.visibility = View.VISIBLE
+
+        // Animate the game over text to fade in
+        tvGameOver.animate().alpha(1.0f).setDuration(500).start()
+    }
+
+    private fun handleGameOver() {
+        // Update high score in Firestore
+        FirestoreHelper.updateHighScoreInFirestore(score)
+        // Show the game over overlay confined to the grid
+        runOnUiThread {
+            overlayBackground.visibility = View.VISIBLE
+            tvGameOver.visibility = View.VISIBLE
+            // Fade in the Game Over text (optional animation)
+            tvGameOver.animate().alpha(1f).setDuration(300).start()
+        }
     }
 }
