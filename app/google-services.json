@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "638071669089",
+    "project_id": "vmir-final-f9161",
+    "storage_bucket": "vmir-final-f9161.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638071669089:android:94e7b2db3ee076da58c520",
+        "android_client_info": {
+          "package_name": "sk.tuke.tictactoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638071669089-186o71f7osu6955500bglevh6lqfjmja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.tuke.tictactoe",
+            "certificate_hash": "c48431a572affcd43b74a7b904966668ca046b96"
+          }
+        },
+        {
+          "client_id": "638071669089-ejhollt74arngfc6qi91f786nuo025d1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHgukanLdUkF8gNkQFOMlfOEePiGgd-Os"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638071669089-ejhollt74arngfc6qi91f786nuo025d1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
