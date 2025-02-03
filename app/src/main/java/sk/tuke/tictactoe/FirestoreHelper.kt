@@ -76,4 +76,27 @@ object FirestoreHelper {
                 onError(e)
             }
     }
+
+    fun fetchUserHighScore(
+        onSuccess: (Int) -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            onError(Exception("No user logged in"))
+            return
+        }
+        val userId = currentUser.uid
+        db.collection("leaderboard")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                // Retrieve the stored high score or return 0 if it does not exist
+                val score = (document.getLong("score") ?: 0L).toInt()
+                onSuccess(score)
+            }
+            .addOnFailureListener { exception ->
+                onError(exception)
+            }
+    }
 }

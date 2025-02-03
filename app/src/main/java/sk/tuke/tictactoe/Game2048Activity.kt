@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -68,14 +69,28 @@ class Game2048Activity : AppCompatActivity() {
 
         // Initialize grid layout
         initializeGrid()
+        // Initialize gesture detector
+        initializeGestureDetector()
 
         // SharedPreferences for storing highscore
         sharedPrefs = getSharedPreferences("2048Highscore", Context.MODE_PRIVATE)
         highscore = sharedPrefs.getInt("HIGH_SCORE", 0)
         updateHighscoreDisplay()
 
-        // Initialize gesture detector
-        initializeGestureDetector()
+        // Fetch the user's high score from Firestore and update if needed
+        FirestoreHelper.fetchUserHighScore(
+            onSuccess = { fetchedScore ->
+                if (fetchedScore > highscore) {
+                    highscore = fetchedScore
+                    sharedPrefs.edit().putInt("HIGH_SCORE", highscore).apply()
+                    updateHighscoreDisplay()
+                }
+            },
+            onError = { exception ->
+                // Log error or handle appropriately
+                Log.e("Game2048Activity", "Failed to fetch high score: ${exception.message}")
+            }
+        )
 
         // Restart game
         btnRestart.setOnClickListener {

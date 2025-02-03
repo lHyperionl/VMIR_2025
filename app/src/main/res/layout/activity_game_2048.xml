@@ -87,12 +87,18 @@
             app:cornerRadius="10dp"/>
     </LinearLayout>
 
-    <Button
+    <!-- LEADERBOARD Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLeaderboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LEADERBOARD"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:backgroundTint="#f65e3b"
+        app:cornerRadius="10dp"/>
 
 
 </LinearLayout>
